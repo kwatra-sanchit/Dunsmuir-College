@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Compliance Work Plan — Aug 27 to Sep 17</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --paper:#F6F4EF;
+  --card:#FFFFFF;
+  --ink:#1E2A38;
+  --body:#3D4852;
+  --slate:#7C8894;
+  --line:#E3DECF;
+  --gold:#A9814F;
+  --gold-soft:#F1E8D8;
+  --green:#4B7A5A;
+  --green-soft:#E7EFE9;
+  --red:#B5533C;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--paper);
+  color:var(--body);
+  font-family:'Inter',sans-serif;
+  padding:28px 20px 60px;
+  min-height:100vh;
+}
+.wrap{max-width:1000px;margin:0 auto;}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  flex-wrap:wrap;
+  gap:16px;
+  border-bottom:1px solid var(--line);
+  padding-bottom:20px;
+  margin-bottom:24px;
+}
+.header h1{
+  font-family:'Source Serif 4',serif;
+  font-weight:700;
+  font-size:28px;
+  color:var(--ink);
+  margin:0 0 4px;
+  letter-spacing:-0.01em;
+}
+.header p{
+  margin:0;
+  color:var(--slate);
+  font-size:14px;
+}
+.progress-block{text-align:right;min-width:190px;}
+.progress-count{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:22px;
+  color:var(--ink);
+  font-weight:500;
+}
+.progress-count span{color:var(--gold);}
+.progress-bar{
+  width:190px;height:6px;background:var(--line);
+  border-radius:4px;overflow:hidden;margin-top:6px;
+}
+.progress-fill{height:100%;background:var(--gold);width:0%;transition:width .4s ease;}
+
+.tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
+.tab{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12.5px;
+  padding:9px 14px;
+  border-radius:20px;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--slate);
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.tab:hover{border-color:var(--gold);color:var(--ink);}
+.tab.active{
+  background:var(--ink);
+  border-color:var(--ink);
+  color:var(--paper);
+}
+.tab .tab-sub{opacity:.7;font-size:11px;margin-left:4px;}
+
+.week-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.week-label{
+  font-family:'Source Serif 4',serif;
+  font-size:19px;
+  color:var(--ink);
+  margin:0;
+  font-weight:600;
+}
+.week-add{
+  font-family:'Inter',sans-serif;
+  font-size:12.5px;
+  border:1px dashed var(--line);
+  background:none;
+  color:var(--slate);
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+}
+.week-add:hover{border-color:var(--gold);color:var(--gold);}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+  margin-bottom:36px;
+}
+.day-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:16px;
+  position:relative;
+}
+.day-card.done{border-color:var(--green);background:var(--green-soft);}
+.day-card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:10px;
+  gap:8px;
+}
+.day-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;
+  color:var(--slate);
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  line-height:1.5;
+}
+.day-num .date-main{display:block;font-size:13.5px;color:var(--ink);font-weight:500;}
+.day-card.done .day-num .date-main{color:var(--green);}
+
+.head-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+
+.stamp-btn{
+  width:28px;height:28px;
+  border-radius:50%;
+  border:1.5px solid var(--line);
+  background:var(--card);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--line);
+  font-size:14px;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1), border-color .2s, color .2s;
+  flex-shrink:0;
+}
+.stamp-btn:hover{border-color:var(--gold);color:var(--gold);}
+.stamp-btn.done{
+  background:var(--green);
+  border-color:var(--green);
+  color:#fff;
+  transform:rotate(-8deg) scale(1.08);
+}
+.stamp-btn.pop{animation:stampPop .38s ease;}
+@keyframes stampPop{
+  0%{transform:scale(1.6) rotate(-18deg);opacity:.3;}
+  60%{transform:scale(0.92) rotate(-4deg);opacity:1;}
+  100%{transform:rotate(-8deg) scale(1.08);}
+}
+.remove-day{
+  width:22px;height:22px;
+  border-radius:50%;
+  border:none;
+  background:none;
+  color:var(--line);
+  cursor:pointer;
+  font-size:15px;
+  line-height:1;
+}
+.remove-day:hover{color:var(--red);}
+
+.task-list{list-style:none;margin:0 0 8px;padding:0;}
+.task-item{
+  display:flex;align-items:flex-start;gap:8px;
+  padding:5px 0;
+  font-size:13.5px;
+  line-height:1.4;
+  color:var(--body);
+}
+.task-item input[type=checkbox]{
+  margin-top:3px;accent-color:var(--gold);cursor:pointer;flex-shrink:0;
+}
+.task-item.checked span{text-decoration:line-through;color:var(--slate);}
+.task-item .del{
+  margin-left:auto;
+  color:var(--line);
+  cursor:pointer;
+  font-size:15px;
+  line-height:1;
+  padding:0 2px;
+  flex-shrink:0;
+}
+.task-item .del:hover{color:var(--red);}
+.task-item span{flex:1;word-break:break-word;}
+
+.add-row{display:flex;gap:6px;margin-top:6px;}
+.add-row input{
+  flex:1;
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:6px 8px;
+  font-size:13px;
+  font-family:'Inter',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+}
+.add-row input:focus{outline:none;border-color:var(--gold);}
+.add-row button{
+  border:none;
+  background:var(--ink);
+  color:var(--paper);
+  border-radius:6px;
+  padding:0 12px;
+  cursor:pointer;
+  font-size:15px;
+}
+.add-row button:hover{background:var(--gold);}
+
+.footer-actions{
+  display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid var(--line);
+  padding-top:16px;
+  color:var(--slate);
+  font-size:12.5px;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.footer-actions .left-actions{display:flex;gap:8px;}
+.footer-actions button{
+  background:none;
+  border:1px solid var(--line);
+  color:var(--slate);
+  padding:7px 14px;
+  border-radius:6px;
+  cursor:pointer;
+  font-family:'Inter',sans-serif;
+  font-size:12.5px;
+}
+.footer-actions button:hover{border-color:var(--red);color:var(--red);}
+.save-status{opacity:.7;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div>
+      <h1>Compliance Work Plan</h1>
+      <p>Hiring &amp; Student Attendance / Activity Oversight — Thu, Aug 27 to Thu, Sep 17, 2026</p>
+    </div>
+    <div class="progress-block">
+      <div class="progress-count"><span id="doneCount">0</span> / <span id="totalCount">16</span> days complete</div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div class="week-label-row">
+    <h2 class="week-label" id="weekLabel"></h2>
+    <button class="week-add" id="addDayBtn">+ Add working day to this week</button>
+  </div>
+  <div class="grid" id="grid"></div>
+
+  <div class="footer-actions">
+    <span class="save-status" id="saveStatus">Loading your plan…</span>
+    <div class="left-actions">
+      <button id="resetBtn">Reset to default plan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---- default plan: 16 working days, Thu Aug 27 - Thu Sep 17 2026, grouped into calendar weeks ---- */
+const DEFAULT_DAYS = [
+  // Week 1
+  {date:"2026-08-27", label:"Thu, Aug 27", tasks:["Review hiring compliance docs (I-9s, background checks, offer letters); flag documentation gaps"]},
+  {date:"2026-08-28", label:"Fri, Aug 28", tasks:["Audit last 90 days of new hires for missing/incomplete paperwork"]},
+  // Week 2
+  {date:"2026-08-31", label:"Mon, Aug 31", tasks:["Pull student attendance data; identify tracking method gaps (manual vs. system-based)"]},
+  {date:"2026-09-01", label:"Tue, Sep 1", tasks:["Review activity/extracurricular compliance records (waivers, supervision ratios, permission forms)"]},
+  {date:"2026-09-02", label:"Wed, Sep 2", tasks:["Compile Week 1 findings into a gap report, prioritized by risk"]},
+  {date:"2026-09-03", label:"Thu, Sep 3", tasks:["Draft/update hiring compliance checklist (standardize across roles)"]},
+  {date:"2026-09-04", label:"Fri, Sep 4", tasks:["Build or refine attendance tracking SOP (logging, frequency, escalation triggers)"]},
+  // Week 3
+  {date:"2026-09-07", label:"Mon, Sep 7", tasks:["Draft activity/event compliance checklist (waivers, chaperone ratios, insurance docs)"]},
+  {date:"2026-09-08", label:"Tue, Sep 8", tasks:["Circulate draft policies to HR and academic staff for feedback"]},
+  {date:"2026-09-09", label:"Wed, Sep 9", tasks:["Incorporate feedback; finalize updated policies"]},
+  {date:"2026-09-10", label:"Thu, Sep 10", tasks:["Prep training materials for hiring managers","Run training session #1 — hiring compliance"]},
+  {date:"2026-09-11", label:"Fri, Sep 11", tasks:["Prep training materials for attendance/activity SOPs","Run training session #2 — attendance/activity compliance"]},
+  // Week 4
+  {date:"2026-09-14", label:"Mon, Sep 14", tasks:["Set up tracking dashboard/spreadsheet for ongoing monitoring"]},
+  {date:"2026-09-15", label:"Tue, Sep 15", tasks:["Spot-check new-hire files under updated checklist","Spot-check attendance logs for SOP adherence"]},
+  {date:"2026-09-16", label:"Wed, Sep 16", tasks:["Spot-check activity/event compliance for events held this month","Compile compliance status report (before/after metrics)"]},
+  {date:"2026-09-17", label:"Thu, Sep 17", tasks:["Present findings and next-phase recommendations to leadership"]}
+];
+
+const WEEK_RANGES = [
+  {label:"Week 1", sub:"Aug 27–28", from:"2026-08-27", to:"2026-08-28"},
+  {label:"Week 2", sub:"Aug 31–Sep 4", from:"2026-08-31", to:"2026-09-04"},
+  {label:"Week 3", sub:"Sep 7–11", from:"2026-09-07", to:"2026-09-11"},
+  {label:"Week 4", sub:"Sep 14–17", from:"2026-09-14", to:"2026-09-17"}
+];
+
+const STORAGE_KEY = 'compliance-plan-aug27-sep17';
+
+function defaultState(){
+  return DEFAULT_DAYS.map(d => ({
+    date: d.date,
+    label: d.label,
+    done: false,
+    tasks: d.tasks.map(t => ({text:t, checked:false}))
+  }));
+}
+
+let days = defaultState();
+let activeWeek = 0;
+
+function weekDayIndexes(w){
+  const range = WEEK_RANGES[w];
+  const idxs = [];
+  days.forEach((d, i) => { if(d.date >= range.from && d.date <= range.to) idxs.push(i); });
+  return idxs;
+}
+
+async function loadState(){
+  const statusEl = document.getElementById('saveStatus');
+  try{
+    const result = await window.storage.get(STORAGE_KEY);
+    if(result && result.value){
+      const parsed = JSON.parse(result.value);
+      if(parsed && Array.isArray(parsed.days)) days = parsed.days;
+    }
+    statusEl.textContent = 'Saved to your account';
+  }catch(e){
+    statusEl.textContent = 'Local session only (storage unavailable)';
+  }
+  render();
+}
+
+async function saveState(){
+  const statusEl = document.getElementById('saveStatus');
+  try{
+    await window.storage.set(STORAGE_KEY, JSON.stringify({days}));
+    statusEl.textContent = 'Saved';
+  }catch(e){
+    statusEl.textContent = 'Could not save — changes kept for this session only';
+  }
+}
+
+function renderTabs(){
+  const tabsEl = document.getElementById('tabs');
+  tabsEl.innerHTML = '';
+  WEEK_RANGES.forEach((w, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (i===activeWeek ? ' active' : '');
+    btn.innerHTML = `${w.label} <span class="tab-sub">${w.sub}</span>`;
+    btn.onclick = () => { activeWeek = i; render(); };
+    tabsEl.appendChild(btn);
+  });
+}
+
+function renderProgress(){
+  const doneCount = days.filter(d => d.done).length;
+  document.getElementById('doneCount').textContent = doneCount;
+  document.getElementById('totalCount').textContent = days.length;
+  document.getElementById('progressFill').style.width = (days.length ? (doneCount/days.length*100) : 0) + '%';
+}
+
+function renderGrid(){
+  document.getElementById('weekLabel').textContent = WEEK_RANGES[activeWeek].label + ' (' + WEEK_RANGES[activeWeek].sub + ')';
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const idxs = weekDayIndexes(activeWeek);
+
+  if(idxs.length === 0){
+    const empty = document.createElement('p');
+    empty.style.color = 'var(--slate)';
+    empty.style.fontSize = '13.5px';
+    empty.textContent = 'No working days in this week yet. Use "Add working day" above.';
+    grid.appendChild(empty);
+    return;
+  }
+
+  idxs.forEach(dayIdx => {
+    const dayState = days[dayIdx];
+    const card = document.createElement('div');
+    card.className = 'day-card' + (dayState.done ? ' done' : '');
+
+    const head = document.createElement('div');
+    head.className = 'day-card-head';
+
+    const label = document.createElement('div');
+    label.className = 'day-num';
+    label.innerHTML = `<span class="date-main">${dayState.label}</span>`;
+
+    const actions = document.createElement('div');
+    actions.className = 'head-actions';
+
+    const stampBtn = document.createElement('button');
+    stampBtn.className = 'stamp-btn' + (dayState.done ? ' done' : '');
+    stampBtn.title = dayState.done ? 'Mark day incomplete' : 'Mark day complete';
+    stampBtn.textContent = dayState.done ? '✓' : '';
+    stampBtn.onclick = () => {
+      dayState.done = !dayState.done;
+      stampBtn.classList.add('pop');
+      saveState();
+      render();
+    };
+
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'remove-day';
+    removeBtn.title = 'Remove this day';
+    removeBtn.textContent = '×';
+    removeBtn.onclick = () => {
+      days.splice(dayIdx, 1);
+      saveState();
+      render();
+    };
+
+    actions.appendChild(stampBtn);
+    actions.appendChild(removeBtn);
+    head.appendChild(label);
+    head.appendChild(actions);
+    card.appendChild(head);
+
+    const list = document.createElement('ul');
+    list.className = 'task-list';
+    dayState.tasks.forEach((task, idx) => {
+      const li = document.createElement('li');
+      li.className = 'task-item' + (task.checked ? ' checked' : '');
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = task.checked;
+      cb.onchange = () => { task.checked = cb.checked; saveState(); render(); };
+      const span = document.createElement('span');
+      span.textContent = task.text;
+      const del = document.createElement('span');
+      del.className = 'del';
+      del.textContent = '×';
+      del.onclick = () => { dayState.tasks.splice(idx,1); saveState(); render(); };
+      li.appendChild(cb);
+      li.appendChild(span);
+      li.appendChild(del);
+      list.appendChild(li);
+    });
+    card.appendChild(list);
+
+    const addRow = document.createElement('div');
+    addRow.className = 'add-row';
+    const input = document.createElement('input');
+    input.placeholder = 'Add a task…';
+    const addBtn = document.createElement('button');
+    addBtn.textContent = '+';
+    const addTask = () => {
+      const val = input.value.trim();
+      if(!val) return;
+      dayState.tasks.push({text:val, checked:false});
+      input.value = '';
+      saveState();
+      render();
+    };
+    addBtn.onclick = addTask;
+    input.onkeydown = (e) => { if(e.key === 'Enter') addTask(); };
+    addRow.appendChild(input);
+    addRow.appendChild(addBtn);
+    card.appendChild(addRow);
+
+    grid.appendChild(card);
+  });
+}
+
+function addDayToActiveWeek(){
+  const idxs = weekDayIndexes(activeWeek);
+  const range = WEEK_RANGES[activeWeek];
+  let nextDate;
+  if(idxs.length > 0){
+    const lastDate = days[idxs[idxs.length-1]].date;
+    const d = new Date(lastDate + 'T00:00:00');
+    d.setDate(d.getDate()+1);
+    nextDate = d.toISOString().slice(0,10);
+    if(nextDate > range.to){
+      alert('This week only runs ' + range.sub + '. Edit task text directly if you need more days here.');
+      return;
+    }
+  } else {
+    nextDate = range.from;
+  }
+  const dObj = new Date(nextDate + 'T00:00:00');
+  const label = dObj.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+  const insertAt = idxs.length > 0 ? idxs[idxs.length-1]+1 : days.findIndex(d => d.date > nextDate);
+  const newDay = {date: nextDate, label, done:false, tasks:[]};
+  if(insertAt === -1){
+    days.push(newDay);
+  } else {
+    days.splice(insertAt, 0, newDay);
+  }
+  saveState();
+  render();
+}
+
+function render(){
+  renderTabs();
+  renderProgress();
+  renderGrid();
+}
+
+document.getElementById('addDayBtn').onclick = addDayToActiveWeek;
+
+document.getElementById('resetBtn').onclick = () => {
+  if(confirm('Reset all days and tasks back to the default plan (Aug 27 – Sep 17)?')){
+    days = defaultState();
+    activeWeek = 0;
+    saveState();
+    render();
+  }
+};
+
+loadState();
+</script>
+</body>
+</html>
